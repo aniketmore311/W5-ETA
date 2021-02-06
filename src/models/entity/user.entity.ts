@@ -13,7 +13,7 @@ export class User extends BaseEntity implements IUser {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ nullable: true })
+  @Column()
   googleID!: string;
 
   @Column({ name: 'first_name' })
@@ -27,6 +27,15 @@ export class User extends BaseEntity implements IUser {
 
   @Column()
   photo!: string;
+
+  @Column({ nullable: true })
+  institute!: string;
+
+  @Column({ nullable: true })
+  position!: string;
+
+  @Column({ default: false })
+  isTeacher!: boolean;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;

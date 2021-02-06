@@ -1,0 +1,33 @@
+<%- include('../partials/header',{pageTitle:'profile',stylesheet:'/css/main.css'}) %> 
+
+<% errorMessages.forEach(message => { %>
+    <p><%= message %> </p>
+<% }) %>
+
+<% successMessages.forEach(message => { %>
+    <p><%= message %> </p>
+<% }) %>
+
+<h1>profile</h1>
+<p>hello <%= user.firstName %> </p>
+<% if (user.isTeacher) { %>
+    <p>you are teacher</p>
+<% } %>
+<% if (!user.isTeacher) { %>
+    <p>you are student</p>
+<% } %>
+
+<form action="/user/registerteacher" method="POST">
+    <label for="institute">institute</label>
+    <input type="text" name="institute" id="institute">
+    <label for="position">position</label>
+    <input type="text" name="position" id="position">
+    <input type="hidden" name="id" value="<%= user.id %>">
+    <button type="submit">register</button>
+</form>
+
+<form action="/user/logout" method="POST">
+    <button type="submit">logout</button>
+</form>
+
+<%- include('../partials/footer',{scripts:[]}) %> 

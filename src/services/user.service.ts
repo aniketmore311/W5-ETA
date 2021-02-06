@@ -43,4 +43,20 @@ export class UserService {
     }
     return Promise.resolve(user);
   }
+
+  public async registerTeacher(
+    id: number,
+    institute: string,
+    position: string
+  ): Promise<IUser> {
+    const user = await User.findOne(id);
+    if (!user) {
+      return Promise.reject(new SiteError('user does not exist'));
+    }
+    user.institute = institute;
+    user.position = position;
+    user.isTeacher = true;
+    await user.save();
+    return Promise.resolve(user);
+  }
 }
