@@ -1,9 +1,12 @@
 import passport from 'passport';
-import { User } from '../models/entity/user.entity';
 import { env } from '../config/env.config';
+import { UserService } from '../services/user.service';
 import makeGoogleStrategy from 'passport-google-oauth20';
 const googleStrategy = makeGoogleStrategy.Strategy;
 import { IUser } from '../types';
+import { container } from 'tsyringe';
+
+const userSerive = container.resolve(UserService);
 
 declare global {
   /*eslint-disable*/
@@ -13,11 +16,13 @@ declare global {
 }
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  console.debug('inside serialize');
+  done(undefined, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  User.findOne({ where: { username: 'ani' } }).then((user) => {
+passport.deserializeUser((id: number, done) => {
+  console.debug('inside deserialize');
+  userSerive.findOne(id).then((user) => {
     done(undefined, user);
   });
 });
@@ -31,8 +36,7 @@ passport.use(
     },
     (accessToken, refreshToken, profile, done) => {
       // findone or create
-      profile.id
-      User.findOne({ where: { username: 'ani' } }).then((user) => {
+      userSerive.findOneorCreate(profile).then((user) => {
         done(undefined, user);
       });
     }

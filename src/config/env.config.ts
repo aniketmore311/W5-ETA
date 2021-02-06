@@ -13,6 +13,3 @@ export const env = {
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
 };
-
-console.log('id: ', env.GOOGLE_CLIENT_ID);
-console.log('secret: ', env.GOOGLE_CLIENT_SECRET);

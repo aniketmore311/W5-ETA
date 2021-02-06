@@ -10,14 +10,6 @@
     <p><%= message %> </p>
 <% }) %>
 
-
-<form action="/user/login" method="POST">
-    <label for="username">username:</label>
-    <input type="text" name="username" id="username" required>
-    <label for="password">password:</label>
-    <input type="password" name="password" id="password" required>
-    <button type="submit">submit</button>
-</form>
-<a href="/user/register">register</a>
+<a href="/auth/google">login with google</a>
 
 <%- include('../partials/footer',{scripts:[]}) %> 

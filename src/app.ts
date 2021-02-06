@@ -26,27 +26,31 @@ export class App {
   }
 
   public initializeMiddleware(): void {
-    this.app.use(express.urlencoded({ extended: false }));
+    this.app.use(express.static(`${env.ROOT_DIR}/src/public`));
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser(env.COOKIE_KEY));
-    // setup sessions
     this.app.use(
-      session({
-        cookie: {
-          maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day in ms
-        },
-        // usinng memory store here use redis or something in production
-        store: new MemoryStore(),
-        secret: env.SESS_KEY,
-        resave: false,
-        name: 'sid',
-        saveUninitialized: false,
-      })
+      session({ secret: env.SESS_KEY, resave: false, saveUninitialized: false })
     );
+    // setup sessions
+    // this.app.use(
+    //   session({
+    //     cookie: {
+    //       maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day in ms
+    //     },
+    //     // usinng memory store here use redis or something in production
+    //     store: new MemoryStore(),
+    //     secret: env.SESS_KEY,
+    //     resave: false,
+    //     name: 'sid',
+    //     saveUninitialized: false,
+    //   })
+    // );
     this.app.use(flash());
     this.app.use(morgan(env.MORGAN_MODE));
     this.app.set('views', `${env.ROOT_DIR}/src/views`);
     this.app.set('view engine', 'ejs');
-    this.app.use(express.static(`${env.ROOT_DIR}/src/public`));
     this.app.use(passport.initialize());
     this.app.use(passport.session());
     // if root path ('/') is visited then redirect to '/home'

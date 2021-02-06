@@ -1,54 +1,45 @@
 import { inject, injectable, singleton } from 'tsyringe';
-import bcrypt from 'bcrypt';
 import { User } from '../models/entity';
 import { IUser } from '../types';
 import { Repository } from 'typeorm';
+import { Profile } from 'passport-google-oauth20';
+import { SiteErrorHandler } from '../middleware';
 import { SiteError } from '../utils';
-import { env } from '../config/env.config';
 
 @injectable()
 @singleton()
 export class UserService {
-  constructor(@inject('userRepo') public userRepo: Repository<User>) {}
-
-  /**
-   * @async
-   * @description
-   * creates new user and returns it
-   * @returns
-   * a promise either resolved with a user or rejected with an error
-   */
-  public async createUser(
-    username: string,
-    firstName: string,
-    lastName: string,
-    password: string
-  ): Promise<IUser> {
-    const existingUser = await this.userRepo.findOne({
-      where: { username: username },
-    });
-    if (existingUser) {
-      // console.log('existing user found: %o', existingUser);
-      return Promise.reject(new SiteError('username already taken'));
+  public async findOneorCreate(profile: Profile): Promise<IUser> {
+    const existing = await User.findOne({ where: { googleID: profile.id } });
+    if (existing) {
+      return Promise.resolve(existing);
     }
-    const user = this.userRepo.create();
-    user.username = username;
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.password = await bcrypt.hash(password, env.SALT_ROUNDS);
-    await this.userRepo.save(user);
-    console.log('created user %o', user);
+    const user = User.create();
+    user.firstName = profile.name?.givenName || '';
+    user.lastName = profile.name?.familyName || '';
+    user.googleID = profile.id;
+    if (profile.emails) {
+      user.email = profile.emails[0].value || '';
+    }
+    if (profile.photos) {
+      user.photo = profile.photos[0].value;
+    }
+    await user.save();
     return Promise.resolve(user);
   }
 
-  public async isUserValid(username: string, password: string): Promise<IUser> {
-    const user = await this.userRepo.findOne({ where: { username: username } });
+  public async findOne(id: number): Promise<IUser> {
+    const user = await User.findOne(id);
     if (!user) {
-      return Promise.reject(new SiteError('invalid username'));
+      return Promise.reject(new SiteError('user not found'));
     }
-    const result = await bcrypt.compare(password, user.password);
-    if (!result) {
-      return Promise.reject(new SiteError('invalid password'));
+    return Promise.resolve(user);
+  }
+
+  public async findOneGoogleId(googleId: string): Promise<IUser> {
+    const user = await User.findOne({ where: { googleID: googleId } });
+    if (!user) {
+      return Promise.reject(new SiteError('user not found'));
     }
     return Promise.resolve(user);
   }

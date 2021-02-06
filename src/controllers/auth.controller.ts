@@ -16,8 +16,8 @@ export class AuthController implements IBaseController {
     this.initializeRoutes();
   }
 
+  /* eslint-disable */
   public bindHandlers() {}
-
   public initializeRoutes(): void {
     this.router.get(
       '/google',
@@ -29,7 +29,7 @@ export class AuthController implements IBaseController {
       passport.authenticate('google', { failureRedirect: '/user/login' }),
       (req, res) => {
         // successful authentication
-        res.send('authentication successful');
+        res.redirect('/home');
       }
     );
   }

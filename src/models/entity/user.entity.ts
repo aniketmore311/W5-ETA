@@ -13,11 +13,8 @@ export class User extends BaseEntity implements IUser {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ nullable: true })
   googleID!: string;
-
-  @Column({ unique: true })
-  username!: string;
 
   @Column({ name: 'first_name' })
   firstName!: string;
@@ -26,7 +23,10 @@ export class User extends BaseEntity implements IUser {
   lastName!: string;
 
   @Column()
-  password!: string;
+  email!: string;
+
+  @Column()
+  photo!: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
