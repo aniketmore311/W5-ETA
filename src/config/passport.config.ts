@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-passport.serializeUser<any>((user, done) => {
+passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
@@ -31,6 +31,7 @@ passport.use(
     },
     (accessToken, refreshToken, profile, done) => {
       // findone or create
+      profile.id
       User.findOne({ where: { username: 'ani' } }).then((user) => {
         done(undefined, user);
       });

@@ -13,6 +13,9 @@ export class User extends BaseEntity implements IUser {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column()
+  googleID!: string;
+
   @Column({ unique: true })
   username!: string;
 

@@ -4,7 +4,7 @@ import './config/passport.config';
 import { App } from './app';
 import { connectionOptions } from './config/typeorm.config';
 import { createConnection } from 'typeorm';
-import { IUserDTO } from './types';
+import { IUser } from './types';
 import {
   UserController,
   HomeController,
@@ -16,7 +16,7 @@ import {
 // extending the express session to hold user
 declare module 'express-session' {
   interface SessionData {
-    user: IUserDTO;
+    user: IUser;
   }
 }
 

@@ -1,15 +1,14 @@
 import { inject, injectable, singleton } from 'tsyringe';
 import bcrypt from 'bcrypt';
-import { IUserService, IUserDTO } from '../types';
 import { User } from '../models/entity';
+import { IUser } from '../types';
 import { Repository } from 'typeorm';
-import { userToDTO } from '../mappers/user.mapper';
 import { SiteError } from '../utils';
 import { env } from '../config/env.config';
 
 @injectable()
 @singleton()
-export class UserService implements IUserService {
+export class UserService {
   constructor(@inject('userRepo') public userRepo: Repository<User>) {}
 
   /**
@@ -24,7 +23,7 @@ export class UserService implements IUserService {
     firstName: string,
     lastName: string,
     password: string
-  ): Promise<IUserDTO> {
+  ): Promise<IUser> {
     const existingUser = await this.userRepo.findOne({
       where: { username: username },
     });
@@ -39,13 +38,10 @@ export class UserService implements IUserService {
     user.password = await bcrypt.hash(password, env.SALT_ROUNDS);
     await this.userRepo.save(user);
     console.log('created user %o', user);
-    return Promise.resolve(userToDTO(user));
+    return Promise.resolve(user);
   }
 
-  public async isUserValid(
-    username: string,
-    password: string
-  ): Promise<IUserDTO> {
+  public async isUserValid(username: string, password: string): Promise<IUser> {
     const user = await this.userRepo.findOne({ where: { username: username } });
     if (!user) {
       return Promise.reject(new SiteError('invalid username'));
@@ -54,6 +50,6 @@ export class UserService implements IUserService {
     if (!result) {
       return Promise.reject(new SiteError('invalid password'));
     }
-    return Promise.resolve(userToDTO(user));
+    return Promise.resolve(user);
   }
 }
