@@ -12,6 +12,7 @@ import { logError, errorTransformer, SiteErrorHandler } from './middleware';
 @singleton()
 export class App {
   public app: express.Application;
+  public port: number = env.PORT;
   public controllerTokens: InjectionToken<IBaseController>[];
 
   constructor(controllerTokens: InjectionToken<IBaseController>[]) {
@@ -78,8 +79,8 @@ export class App {
   }
 
   public listen(): void {
-    this.app.listen(env.PORT, () => {
-      console.log(`server is listening on port ${env.PORT}`);
+    this.app.listen(this.port, () => {
+      console.log(`server is listening on port ${this.port}`);
     });
   }
 }
