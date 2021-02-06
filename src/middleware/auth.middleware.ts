@@ -9,7 +9,7 @@ export const ensureAuth = (
   next: NextFunction
 ): void => {
   // is user is set then allow
-  if (req.session.user) {
+  if (req.user) {
     next();
   } else {
     // else dont allow and redirect to login
@@ -28,7 +28,7 @@ export const ensureUnauth = (
   next: NextFunction
 ): void => {
   // if user is set then don't allow and redirect to home
-  if (req.session.user) {
+  if (req.user) {
     res.redirect('/home');
   } else {
     // else allow

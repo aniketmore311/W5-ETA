@@ -1,13 +1,15 @@
 export interface IUser {
   id: number;
 
-  username: string;
+  googleID: string;
 
   firstName: string;
 
   lastName: string;
 
-  password: string;
+  email: string;
+
+  photo: string;
 
   createdAt: Date;
 

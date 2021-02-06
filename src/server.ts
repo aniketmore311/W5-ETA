@@ -1,20 +1,22 @@
 import 'reflect-metadata';
 import './config/tsyringe.cofig';
+import './config/passport.config';
 import { App } from './app';
 import { connectionOptions } from './config/typeorm.config';
 import { createConnection } from 'typeorm';
-import { IUserDTO } from './types';
+import { IUser } from './types';
 import {
   UserController,
   HomeController,
   TestController,
   ViewController,
+  AuthController,
 } from './controllers/index';
 
 // extending the express session to hold user
 declare module 'express-session' {
   interface SessionData {
-    user: IUserDTO;
+    user: IUser;
   }
 }
 
@@ -24,12 +26,17 @@ if (process.env.DB_CONNECT == 'true') {
   createConnection(connectionOptions)
     /*eslint-disable @typescript-eslint/no-unused-vars */
     .then((connection) => {
-      const app = new App([HomeController, UserController, TestController]);
+      const app = new App([
+        HomeController,
+        UserController,
+        TestController,
+        AuthController,
+      ]);
       app.listen();
     })
     .catch((err) => console.log(err));
+} else {
+  const app2 = new App([ViewController]);
+  app2.port = 5000;
+  app2.listen();
 }
-
-const app2 = new App([ViewController]);
-app2.port = 5000;
-app2.listen();
