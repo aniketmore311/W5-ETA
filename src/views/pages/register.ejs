@@ -1,0 +1,27 @@
+<%- include('../partials/header',{pageTitle:'register',stylesheet:'/css/main.css'}) %> 
+
+<h1>register</h1>
+
+<% errorMessages.forEach(message => { %>
+    <p><%= message %> </p>
+<% }) %>
+
+<% successMessages.forEach(message => { %>
+    <p><%= message %> </p>
+<% }) %>
+
+<form method="POST" action="/user/register">
+    <label for="username">username:</label>
+    <input type="text" name="username" id="username" required>
+    <label for="firstname">firstname:</label>
+    <input type="text" name="firstname" id="firstname" required>
+    <label for="lastname">lastname:</label>
+    <input type="text" name="lastname" id="lastname" required>
+    <label for="password">password:</label>
+    <input type="password" name="password" id="password" required>
+    <label for="confirmpassword">password:</label>
+    <input type="password" name="confirmpassword" id="confirmpassword" required>
+    <button type="submit">submit</button>
+</form>
+
+<%- include('../partials/footer',{scripts:[]}) %> 

@@ -1,0 +1,22 @@
+<%- include('../partials/header',{pageTitle:'login',stylesheet:'/css/main.css'}) %> 
+
+<h1>login</h1>
+
+<% errorMessages.forEach(message => { %>
+    <p><%= message %> </p>
+<% }) %>
+
+<% successMessages.forEach(message => { %>
+    <p><%= message %> </p>
+<% }) %>
+
+
+<form action="/user/login" method="POST">
+    <label for="username">username:</label>
+    <input type="text" name="username" id="username" required>
+    <label for="password">password:</label>
+    <input type="password" name="password" id="password" required>
+    <button type="submit">submit</button>
+</form>
+
+<%- include('../partials/footer',{scripts:[]}) %> 
