@@ -53,13 +53,15 @@ export class QuestionController implements IBaseController {
 
   public async deleteQuestion(req: Request, res: Response): Promise<void> {
     const { userid, questionid } = req.body;
-    const question = await Question.findOne(Number(questionid));
+    const question = await Question.findOne(Number(questionid), {
+      relations: ['user'],
+    });
     if (question) {
       console.log('question%o', question);
-      //   if (question.user.id == userid) {
-      //     res.redirect('/home');
-      //   }
-      //   question.remove();
+      if (question.user.id != Number(userid as string)) {
+        return res.redirect('/home');
+      }
+      await question.remove();
       res.send('question deleted');
     }
   }

@@ -12,6 +12,7 @@ import {
   ViewController,
   AuthController,
   QuestionController,
+  AnswerController,
 } from './controllers/index';
 
 // extending the express session to hold user
@@ -32,6 +33,7 @@ if (process.env.DB_CONNECT == 'true') {
         UserController,
         TestController,
         QuestionController,
+        AnswerController,
         AuthController,
       ]);
       app.listen();

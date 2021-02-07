@@ -4,3 +4,4 @@ export * from './test.controller';
 export * from './view.controller';
 export * from './auth.controller';
 export * from './question.controller';
+export * from './answer.controller';
