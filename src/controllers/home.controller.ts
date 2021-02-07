@@ -35,7 +35,7 @@ export class HomeController implements IBaseController {
       successMessages: req.flash('successMessages'),
       user: req.user,
     };
-    res.render('pages/home', context);
+    res.render('static/home', context);
   }
 
   public async test(req: Request, res: Response): Promise<void> {
