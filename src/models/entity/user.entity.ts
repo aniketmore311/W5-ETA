@@ -5,8 +5,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Question } from './index';
 import { IUser } from '../../types';
+import { Answer } from './answer.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity implements IUser {
@@ -34,7 +37,7 @@ export class User extends BaseEntity implements IUser {
   @Column({ nullable: true })
   position!: string;
 
-  @Column({ default: false })
+  @Column({ default: false, name: 'is_teacher' })
   isTeacher!: boolean;
 
   @CreateDateColumn({ name: 'created_at' })
@@ -42,4 +45,14 @@ export class User extends BaseEntity implements IUser {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
+
+  @OneToMany(() => Question, (question) => question.user, {
+    cascade: true,
+  })
+  questions!: Question[];
+
+  @OneToMany(() => Answer, (answer) => answer.user, {
+    cascade: true,
+  })
+  answers!: Answer[];
 }
